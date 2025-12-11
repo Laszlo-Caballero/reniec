@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { Reniec } from './entities/reniec.entity';
 import { FindReniecDto } from './dto/find-reniec.dto';
+import { parseDDMMYYYY } from 'src/utils/parseDate';
 
 @Injectable()
 export class ReniecService {
@@ -77,10 +78,10 @@ export class ReniecService {
       nombres: rest.nombres,
       apellidoPaterno: rest.apellidoPaterno,
       apellidoMaterno: rest.apellidoMaterno,
-      fechaNacimiento: rest.fechaNacimiento,
-      fechaInscripcion: rest.fechaInscripcion,
-      fechaEmision: rest.fechaEmision,
-      fechaCaducidad: rest.fechaCaducidad,
+      fechaNacimiento: parseDDMMYYYY(rest.fechaNacimiento),
+      fechaInscripcion: parseDDMMYYYY(rest.fechaInscripcion),
+      fechaEmision: parseDDMMYYYY(rest.fechaEmision),
+      fechaCaducidad: parseDDMMYYYY(rest.fechaCaducidad),
       ubigeoNacimiento: rest.ubigeoNacimiento,
       ubigeoDireccion: rest.ubigeoDomicilio,
       direccion: rest.direccion,
