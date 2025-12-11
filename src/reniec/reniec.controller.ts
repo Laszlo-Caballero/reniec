@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ReniecService } from './reniec.service';
 import { FindReniecDto } from './dto/find-reniec.dto';
 
@@ -15,7 +15,7 @@ export class ReniecController {
     return this.reniecService.findByName(name);
   }
 
-  @Get('person')
+  @Post('person')
   findPerson(@Body() body: FindReniecDto) {
     return this.reniecService.findByDto(body);
   }
