@@ -1,5 +1,6 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param } from '@nestjs/common';
 import { ReniecService } from './reniec.service';
+import { FindReniecDto } from './dto/find-reniec.dto';
 
 @Controller('reniec')
 export class ReniecController {
@@ -12,5 +13,10 @@ export class ReniecController {
   @Get('name/:name')
   findByName(@Param('name') name: string) {
     return this.reniecService.findByName(name);
+  }
+
+  @Get('person')
+  findPerson(@Body() body: FindReniecDto) {
+    return this.reniecService.findByDto(body);
   }
 }
