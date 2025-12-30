@@ -4,6 +4,7 @@ import { Like, Repository } from 'typeorm';
 import { Reniec } from './entities/reniec.entity';
 import { FindReniecDto } from './dto/find-reniec.dto';
 import { parseDDMMYYYY } from 'src/utils/parseDate';
+import { DocNamesDto } from './dto/doc-names.dto';
 
 @Injectable()
 export class ReniecService {
@@ -95,6 +96,57 @@ export class ReniecService {
       status: 200,
       message: 'Person found',
       data: parsePerson,
+    };
+  }
+
+  async findByDocNames(dto: DocNamesDto) {
+    const isDni = !!dto.dni;
+
+    if (isDni) {
+      const person = await this.reniecRepository.findOneBy({
+        dni: dto.dni,
+      });
+
+      if (!person) {
+        throw new HttpException('Person not found', 404);
+      }
+
+      const [departamento, provincia, distrito] =
+        person.ubigeoDomicilio.split('-');
+
+      const parsePerson = {
+        ...person,
+        departamento,
+        provincia,
+        distrito,
+        sexo: person.sexo === '1' ? 'MASCULINO' : 'FEMENINO',
+      };
+
+      return {
+        status: 200,
+        message: 'Person found',
+        data: parsePerson,
+      };
+    }
+
+    const { nombres, apellidos } = dto;
+
+    const [apellidoPaterno, apellidoMaterno] = apellidos!.split(' ');
+
+    const person = await this.reniecRepository.findOneBy({
+      nombres: Like(`%${nombres}%`),
+      apellidoPaterno: apellidoPaterno,
+      apellidoMaterno: apellidoMaterno,
+    });
+
+    if (!person) {
+      throw new HttpException('Person not found', 404);
+    }
+
+    return {
+      status: 200,
+      message: 'Person found',
+      data: person,
     };
   }
 }

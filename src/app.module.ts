@@ -12,6 +12,7 @@ import { ReniecModule } from './reniec/reniec.module';
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      requestTimeout: 60000,
       options: {
         encrypt: process.env.ENCRYPT === 'true',
         trustServerCertificate: true,
